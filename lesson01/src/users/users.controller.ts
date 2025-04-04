@@ -4,8 +4,9 @@ import { Body, Controller, Get, Param, Post, Query, Patch, Delete } from '@nestj
 export class UsersController {
 
     @Get()
-    findAll() {
-        return 'This action returns a list of all users';
+    // with query
+    findAll(@Query('name') name: string, @Query('age') age: number) {
+        return `Get users with name ${name} and age ${age}`;
     }
 
     @Get(':id')
