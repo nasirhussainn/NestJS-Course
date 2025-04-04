@@ -1,32 +1,36 @@
 import { Body, Controller, Get, Param, Post, Query, Patch, Delete } from '@nestjs/common';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
+    constructor(private readonly usersService: UsersService) { }
 
     @Get()
-    // with query
-    findAll(@Query('name') name: string, @Query('age') age: number) {
-        return `Get users with name ${name} and age ${age}`;
+    findAll(
+        @Query('name') name: string,
+        @Query('age') age: number,
+        @Query('role') role: 'INTERN' | 'ADMIN' | 'USER',
+    ) {
+        return this.usersService.findAll(name, +age, role);
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return `This action returns a #${id} user`;
+    findOne(@Param('id') id: number) {
+        return this.usersService.findOne(+id);
     }
 
     @Post()
-    create(@Body() user: {}) {
-        return user;
+    create(@Body() user: { id: number; name: string; age: number; role: 'INTERN' | 'ADMIN' | 'USER' }) {
+        return this.usersService.create(user);
     }
 
     @Patch(':id')
-    update(@Param('id') id: string, @Body() user: {}) {
-        return { id, ...user }
+    update(@Param('id') id: number, @Body() user: { name?: string; age?: number; role?: 'INTERN' | 'ADMIN' | 'USER' }) {
+        return this.usersService.update(id, user);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return { id }
+    remove(@Param('id') id: number) {
+        return this.usersService.remove(id);
     }
-
 }
