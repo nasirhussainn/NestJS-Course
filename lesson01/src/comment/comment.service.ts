@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CommentService {
   constructor(private prisma: PrismaService) {}
 
-  async createComment(data: CreateCommentDto) {
+  async createComment(data: Prisma.CommentCreateInput) {
     return this.prisma.comment.create({ data });
   }
 
